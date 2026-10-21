@@ -1,5 +1,6 @@
 package com.example.test1_c14240086.myfirstlistview
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -51,10 +52,7 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
-        _lv1.setOnTouchListener { _, event ->
-            gestureDetector.onTouchEvent(event)
-            false
-        }
+
 
         val gestureDetector = GestureDetector(
             this,
@@ -69,7 +67,41 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
+
+        _lv1.setOnTouchListener{_,event ->
+            gestureDetector.onTouchEvent(event)
+            false
+        }
     }
 
-            var data = mutableListOf<String>()
+    private fun showActionDialog(
+        position: Int,
+        selectedItem: String,
+        data: MutableList<String>,
+        adapter: ArrayAdapter<String>
+    ){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("ITEM $selectedItem")
+        builder.setMessage("Pilih tindakan yang ingin dilakukan:")
+
+        builder.setPositiveButton("Update"){_,_ ->
+
+        }
+        builder.setNegativeButton("Hapus"){_,_ ->
+            data.removeAt(position)
+            adapter.notifyDataSetChanged()
+            Toast.makeText(
+                this,
+                "Hapus Item $selectedItem",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        builder.setNeutralButton("Batal") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.create().show()
+    }
+
+    var data = mutableListOf<String>()
 }
